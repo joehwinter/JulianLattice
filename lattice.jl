@@ -79,7 +79,6 @@ function dynamics!(lattice, parts)
 		parts[i] = move!(parts[i],lattice)
 		lattice = createLattice(lattice, parts)
 	end 
-println("dynamics")
 return (lattice,parts)
 end
 
@@ -124,6 +123,10 @@ function sim!(lattice,parts,n)
 	end
 end
 
+function AnimatedSim(lattice, parts)
+
+end
+
 
 #Initialising Packages
 using Colors,Plots
@@ -131,7 +134,7 @@ using Colors,Plots
 
 #input variables 
 size = 100 
-num = 20 
+num = 30 
 initPercent = .30
 
 #initialisation 
@@ -141,9 +144,17 @@ nonInfParts = partLists[2]
 infParts = partLists[3]
 lattice = createLattice(size,parts)
 
-heatmap(lattice,color = :redsblues)
 
-lattice100 = sim!(lattice,parts,100)
+anim = @animate for i in 1:500
+	global lattice
+	global parts
+	heatmap(lattice,color = :redsblues)
+	dyn = dynamics!(lattice, parts)
+	lattice = dyn[1]
+	parts = dyn[2]
+end
+gif(anim, "lattice_100.gif", fps =30)
+
 
 
 
